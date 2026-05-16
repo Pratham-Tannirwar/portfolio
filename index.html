@@ -21,6 +21,7 @@
       <li><a href="#projects">Projects</a></li>
       <li><a href="#competitive">CP Profiles</a></li>
       <li><a href="#certifications">Certs</a></li>
+      <li><a href="#resume">Resume</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
@@ -36,7 +37,12 @@
   <div class="hero-content">
     <div class="hero-badge"><span class="dot"></span> Open to Opportunities</div>
     <h1>Hi, I'm <span class="gradient-text">Pratham Tannirwar</span></h1>
-    <p class="subtitle">Full-Stack Developer · AI/ML Enthusiast · Competitive Programmer</p>
+    <p class="subtitle">
+      <span class="role-wrapper">
+        <span class="role-text" id="roleText"></span>
+        <span class="role-cursor">|</span>
+      </span>
+    </p>
     <div class="hero-cta">
       <a href="#projects" class="btn btn-primary">🚀 View Projects</a>
       <a href="#contact" class="btn btn-outline">💬 Let's Talk</a>
@@ -396,6 +402,40 @@
   </div>
 </section>
 
+<!-- ===== RESUME ===== -->
+<section id="resume" class="cp-section">
+  <div class="section-container">
+    <div class="section-header reveal">
+      <span class="section-tag">📄 Resume</span>
+      <h2 class="section-title">My Resume</h2>
+      <p class="section-desc">View my qualifications, experience, and skills — all in one page</p>
+    </div>
+    <div class="resume-cta reveal">
+      <div class="resume-icon-wrapper">
+        <div class="resume-icon-glow"></div>
+        <div class="resume-icon-box">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="url(#resumeGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <defs><linearGradient id="resumeGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6c63ff"/><stop offset="100%" stop-color="#00d4aa"/></linearGradient></defs>
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+      </div>
+      <p class="resume-hint">Click below to preview my resume. You can download it directly from the viewer.</p>
+      <a href="resume.pdf" target="_blank" class="btn btn-primary btn-view-resume" id="viewResume">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        View Resume
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- ===== CONTACT ===== -->
 <section id="contact">
   <div class="section-container">
@@ -427,12 +467,20 @@
           </a>
         </div>
       </div>
-      <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
-        <div class="form-group"><input type="text" placeholder="Your Name" required id="form-name"></div>
-        <div class="form-group"><input type="email" placeholder="Your Email" required id="form-email"></div>
-        <div class="form-group"><input type="text" placeholder="Subject" id="form-subject"></div>
-        <div class="form-group"><textarea placeholder="Your Message" required id="form-message"></textarea></div>
-        <button type="submit" class="btn btn-primary btn-submit">✉️ Send Message</button>
+      <form class="contact-form" id="contactForm">
+        <input type="hidden" name="access_key" value="4c9ae738-83a5-428b-b614-facbfd0dcedc">
+        <input type="hidden" name="subject" value="New Portfolio Contact from Website">
+        <input type="hidden" name="from_name" value="Portfolio Contact Form">
+        <input type="checkbox" name="botcheck" style="display: none;">
+        <div class="form-group"><input type="text" name="name" placeholder="Your Name" required id="form-name"></div>
+        <div class="form-group"><input type="email" name="email" placeholder="Your Email" required id="form-email"></div>
+        <div class="form-group"><input type="text" name="subject_line" placeholder="Subject" id="form-subject"></div>
+        <div class="form-group"><textarea name="message" placeholder="Your Message" required id="form-message"></textarea></div>
+        <button type="submit" class="btn btn-primary btn-submit" id="submitBtn">
+          <span class="btn-text">✉️ Send Message</span>
+          <span class="btn-loading" style="display:none;">⏳ Sending...</span>
+        </button>
+        <div class="form-status" id="formStatus"></div>
       </form>
     </div>
   </div>

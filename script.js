@@ -127,18 +127,58 @@ const progressObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.3 });
 progressBars.forEach(bar => progressObserver.observe(bar));
 
-// ===== FORM HANDLER =====
-function handleSubmit(e) {
+// ===== FORM HANDLER (Web3Forms) =====
+const contactForm = document.getElementById('contactForm');
+contactForm.addEventListener('submit', async function (e) {
   e.preventDefault();
-  const btn = e.target.querySelector('.btn-submit');
-  btn.textContent = '✅ Message Sent!';
-  btn.style.background = 'linear-gradient(135deg, #00d4aa, #6c63ff)';
-  setTimeout(() => {
-    btn.innerHTML = '✉️ Send Message';
-    btn.style.background = '';
-    e.target.reset();
-  }, 3000);
-}
+
+  const btn = document.getElementById('submitBtn');
+  const btnText = btn.querySelector('.btn-text');
+  const btnLoading = btn.querySelector('.btn-loading');
+  const formStatus = document.getElementById('formStatus');
+
+  // Show loading state
+  btnText.style.display = 'none';
+  btnLoading.style.display = 'inline-flex';
+  btn.disabled = true;
+  formStatus.textContent = '';
+  formStatus.className = 'form-status';
+
+  const formData = new FormData(contactForm);
+
+  try {
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      formStatus.textContent = '✅ Message sent successfully! I\'ll get back to you soon.';
+      formStatus.classList.add('form-status-success');
+      btn.style.background = 'linear-gradient(135deg, #00d4aa, #6c63ff)';
+      contactForm.reset();
+    } else {
+      formStatus.textContent = '❌ Something went wrong. Please try again or email me directly.';
+      formStatus.classList.add('form-status-error');
+    }
+  } catch (error) {
+    formStatus.textContent = '❌ Network error. Please check your connection and try again.';
+    formStatus.classList.add('form-status-error');
+  } finally {
+    // Restore button
+    btnText.style.display = 'inline-flex';
+    btnLoading.style.display = 'none';
+    btn.disabled = false;
+
+    setTimeout(() => {
+      formStatus.textContent = '';
+      formStatus.className = 'form-status';
+      btn.style.background = '';
+    }, 5000);
+  }
+});
 
 // ===== SMOOTH SCROLL FOR NAV =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -149,18 +189,38 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// ===== TYPING EFFECT ON SUBTITLE =====
-const subtitle = document.querySelector('.hero .subtitle');
-if (subtitle) {
-  const text = subtitle.textContent;
-  subtitle.textContent = '';
-  let i = 0;
-  function type() {
-    if (i < text.length) {
-      subtitle.textContent += text.charAt(i);
-      i++;
-      setTimeout(type, 40);
+// ===== ROLE ROTATION TYPEWRITER =====
+const roles = ['Full-Stack Developer', 'AI/ML Enthusiast', 'Competitive Programmer'];
+const roleEl = document.getElementById('roleText');
+let roleIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function typeRole() {
+  const current = roles[roleIndex];
+
+  if (!isDeleting) {
+    // Typing
+    roleEl.textContent = current.substring(0, charIndex + 1);
+    charIndex++;
+    if (charIndex === current.length) {
+      // Pause at full text
+      setTimeout(() => { isDeleting = true; typeRole(); }, 2000);
+      return;
     }
+    setTimeout(typeRole, 80);
+  } else {
+    // Deleting
+    roleEl.textContent = current.substring(0, charIndex - 1);
+    charIndex--;
+    if (charIndex === 0) {
+      isDeleting = false;
+      roleIndex = (roleIndex + 1) % roles.length;
+      setTimeout(typeRole, 400);
+      return;
+    }
+    setTimeout(typeRole, 40);
   }
-  setTimeout(type, 1200);
 }
+
+setTimeout(typeRole, 1200);
